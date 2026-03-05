@@ -1,0 +1,45 @@
+{
+  "last_updated": "2026-03-03T00:00:00Z",
+  "competitors_researched": [
+    {
+      "company": "Google Sign-In",
+      "date_researched": "2026-03-03",
+      "file": ".pm/competitors/google-sign-in.md",
+      "freshness": "current"
+    },
+    {
+      "company": "Apple Sign-In",
+      "date_researched": "2026-03-03",
+      "file": ".pm/competitors/apple-sign-in.md",
+      "freshness": "current"
+    },
+    {
+      "company": "GitHub OAuth",
+      "date_researched": "2026-03-03",
+      "file": ".pm/competitors/github-oauth.md",
+      "freshness": "current"
+    },
+    {
+      "company": "Microsoft Sign-In (Entra)",
+      "date_researched": "2026-03-03",
+      "file": ".pm/competitors/microsoft-sign-in.md",
+      "freshness": "current"
+    },
+    {
+      "company": "OAuth2 Market Trends 2026",
+      "date_researched": "2026-03-03",
+      "file": ".pm/competitors/oauth-market-trends-2026.md",
+      "freshness": "current"
+    }
+  ],
+  "research_sources": [
+    "MojoAuth 2026 Developer Authentication Study",
+    "State of Passwordless Authentication 2026",
+    "Authentication Trends in 2026: Passkeys, OAuth3, and WebAuthn",
+    "5 authentication trends that will define 2026: AuthSignal",
+    "Going Deep with Social Login: A New Analysis (Okta)",
+    "Official provider documentation (Google, Apple, GitHub, Microsoft)"
+  ],
+  "next_review_date": "2026-06-03",
+  "review_frequency": "quarterly"
+}
