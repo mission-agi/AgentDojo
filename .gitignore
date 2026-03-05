@@ -15,3 +15,10 @@
 
 # Claude local state (not part of the skill system)
 .claude/
+
+# Local settings
+settings.local.json
+
+# Scratch files
+*.backup
+*.tmp
