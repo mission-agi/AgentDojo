@@ -282,6 +282,125 @@ Test Script Structure:
 
 ---
 
+## N-Run Stability & Performance Testing
+
+### Purpose
+Run the same test scenario N times consecutively to detect:
+- Intermittent failures (flaky behavior under load)
+- Memory leaks that compound across runs
+- Resource exhaustion (file handles, connections, threads)
+- Performance degradation over time (warm-up vs. steady-state)
+
+### N-Run Execution Framework
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                  N-RUN EXECUTION LOOP                        │
+│                                                              │
+│  for run_id in 1..N:                                        │
+│    1. PRE-RUN:                                              │
+│       - Record baseline: memory, open handles, connections  │
+│       - Reset application state (if stateful test)          │
+│       - Clear caches (if testing cold performance)          │
+│                                                              │
+│    2. EXECUTE:                                              │
+│       - Run test scenario with full monitoring              │
+│       - Capture: stdout, stderr, exit_code, duration        │
+│       - Capture: memory_peak, cpu_peak, gc_pauses           │
+│       - Capture: custom metrics (latency, throughput, etc.) │
+│                                                              │
+│    3. POST-RUN:                                             │
+│       - Record end state: memory, handles, connections      │
+│       - Save run artifacts: logs, screenshots, profiles     │
+│       - Compare to baseline for resource delta              │
+│       - Short cooldown period (configurable, default 5s)    │
+│                                                              │
+│  AGGREGATE:                                                  │
+│    - Compute: mean, median, p50, p90, p95, p99, stddev     │
+│    - Compute: min, max, range                               │
+│    - Compute: crash_rate, pass_rate                         │
+│    - Compute: memory_trend (linear regression)              │
+│    - Compute: coefficient_of_variation (stddev/mean)        │
+│    - Flag: flaky tests, resource leaks, degradation trend   │
+│                                                              │
+│  VERDICT:                                                    │
+│    PASS if: crash_rate==0, pass_rate==100%,                 │
+│             memory_growth<5%, duration_cv<10%               │
+│    FAIL if: any criterion breached                          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Recommended N Values by Test Type
+
+| Test Type | Default N | Fast CI N | Pre-Release N | Rationale |
+|-----------|-----------|-----------|---------------|-----------|
+| **Performance baseline** | 5 | 3 | 10 | Detect variance, establish reliable p99 |
+| **Stability soak** | 3 | 1 | 5 | Each run is 8-24h; multiply for confidence |
+| **Stress breaking-point** | 3 | 1 | 5 | Confirm break point is consistent |
+| **Spike recovery** | 5 | 3 | 10 | Recovery behavior can vary |
+| **Unit/integration suite** | 10 | 5 | 20 | Detect flaky tests |
+| **E2E suite** | 5 | 3 | 10 | Higher variance expected |
+
+### N-Run Output Report Template
+
+```markdown
+## N-Run Stability Report: [Test Name]
+
+**Date:** [Date]
+**N:** [Number of runs]
+**Environment:** [Env details]
+**Scenario:** [Description]
+
+### Run Summary
+
+| Run | Duration | Memory Peak | Exit Code | Pass/Fail | Notes |
+|-----|----------|-------------|-----------|-----------|-------|
+| 1   | [Xs]     | [X MB]      | 0         | PASS      |       |
+| 2   | [Xs]     | [X MB]      | 0         | PASS      |       |
+| ... | ...      | ...         | ...       | ...       | ...   |
+| N   | [Xs]     | [X MB]      | 0         | PASS      |       |
+
+### Aggregated Metrics
+
+| Metric | Value |
+|--------|-------|
+| Pass Rate | [X/N] ([Y%]) |
+| Crash Rate | [X/N] ([Y%]) |
+| Mean Duration | [X.XX]s |
+| Duration StdDev | [X.XX]s ([Y%] CV) |
+| Duration p50/p95/p99 | [X]s / [Y]s / [Z]s |
+| Memory Growth (run 1 → N) | [X%] |
+| Memory Trend (slope) | [+X MB/run] |
+| Resource Leaks Detected | [count] |
+| Flaky Tests Detected | [count] / [total] |
+
+### Verdict: [PASS / FAIL]
+
+[If FAIL: list specific criteria breached with evidence]
+```
+
+### k6 N-Run Script Pattern
+
+```
+Execution pattern for k6 (or equivalent tool):
+
+  # Run N iterations with output capture
+  for i in $(seq 1 $N); do
+    echo "=== Run $i/$N ==="
+    k6 run \
+      --out json=results/run_${i}.json \
+      --summary-export=results/summary_${i}.json \
+      script.js 2>&1 | tee results/log_${i}.txt
+    echo "Exit code: $?"
+    sleep $COOLDOWN
+  done
+
+  # Aggregate results
+  python3 aggregate_runs.py results/ --format markdown --output report.md
+```
+
+---
+
 ## Performance Test Plan Template
 
 Save to `.qae/performance/perf-plan-[system].md`:
