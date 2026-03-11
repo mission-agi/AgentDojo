@@ -22,3 +22,6 @@ settings.local.json
 # Scratch files
 *.backup
 *.tmp
+
+# Prompt files (local instructions, not part of deliverables)
+Prompt.md
