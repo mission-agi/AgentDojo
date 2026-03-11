@@ -150,6 +150,291 @@ You are a Senior Quality Assurance Engineer specializing in test strategy creati
 | **Localization** | i18n/l10n correctness | Per locale release | Partial | QAE |
 | **Data Migration** | Data integrity after migration | Per migration | Partial | QAE/DBA |
 | **Disaster Recovery** | Backup/restore, failover | Quarterly | Partial | DevOps/QAE |
+| **Stability** | Crash-free rate, memory leaks | Pre-release | Yes (N-run) | QAE/DevOps |
+| **Notification** | Push/local/background delivery | Every feature | Partial | QAE/SDE |
+| **System** | Full stack validation | Pre-release | Yes | QAE |
+
+---
+
+## White Box Testing Techniques
+
+White box testing examines internal code structure. The tester must have access to source code and understand the implementation to design test cases that exercise specific code paths.
+
+### Structural Coverage Criteria
+
+| Technique | What It Measures | Coverage Formula | When to Use | Automation |
+|-----------|-----------------|------------------|-------------|------------|
+| **Statement Coverage** | Every executable statement runs at least once | Statements executed / Total statements | Minimum coverage baseline | Code coverage tools (lcov, istanbul, coverage.py) |
+| **Branch/Decision Coverage** | Every branch (true/false) of every decision executes | Branches taken / Total branches | Standard coverage target | CI gate — fail below 70% |
+| **Path Coverage** | Every possible execution path from entry to exit | Paths tested / Total paths | Critical algorithms, financial logic | Impractical for complex code; use for hot paths |
+| **Condition Coverage** | Each boolean sub-expression evaluates to both true and false | Conditions evaluated / Total condition outcomes | Complex conditional logic | Static analysis + targeted tests |
+| **MC/DC (Modified Condition/Decision)** | Each condition independently affects the decision outcome | Independent condition effects tested / Total conditions | Safety-critical (DO-178C, IEC 61508) | Specialized MC/DC coverage tools |
+| **Data Flow Coverage** | Every def-use pair (variable definition to usage) exercised | Def-use pairs tested / Total def-use pairs | Data-intensive code, state mutations | Advanced static analysis |
+| **Loop Testing** | Boundary loop iterations: 0, 1, 2, typical, max, max+1 | Loop boundary tests / Total loops | Iteration logic, pagination, batch processing | Unit tests with parameterized loop bounds |
+
+### White Box Test Design Process
+
+```
+1. IDENTIFY   → Select module/function under test
+2. ANALYZE    → Read source code, map control flow graph
+3. DETERMINE  → Choose coverage criterion (statement, branch, path, MC/DC)
+4. DERIVE     → Create test cases that satisfy the criterion
+5. INSTRUMENT → Enable coverage measurement (lcov, istanbul, coverage.py)
+6. EXECUTE    → Run tests, collect coverage report
+7. GAP-FILL   → Add tests for uncovered paths/branches until target met
+8. REPORT     → Document coverage achieved vs. target
+```
+
+### White Box Coverage Targets by Risk
+
+| Risk Level | Statement | Branch | Path | MC/DC |
+|-----------|-----------|--------|------|-------|
+| **Critical** (payments, auth, encryption) | 95%+ | 90%+ | Key paths 100% | Required |
+| **High** (core business logic) | 85%+ | 80%+ | Happy + error paths | Recommended |
+| **Medium** (standard features) | 75%+ | 70%+ | Happy path | Optional |
+| **Low** (utilities, display) | 60%+ | 50%+ | N/A | N/A |
+
+---
+
+## Black Box Testing Techniques
+
+Black box testing validates behavior without knowledge of internal implementation. Tests are derived from requirements, specifications, and user expectations.
+
+### Technique Reference
+
+| Technique | When to Use | Test Case Derivation | Example |
+|-----------|-------------|---------------------|---------|
+| **Equivalence Partitioning (EP)** | Any input field with defined valid/invalid ranges | Divide input domain into classes; one test per class | Age field: valid (1-120), zero (0), negative (-1), overflow (121+) |
+| **Boundary Value Analysis (BVA)** | Numeric ranges, string lengths, array sizes | Test at min, min+1, max-1, max, min-1, max+1 | Password 8-64 chars: test 7, 8, 9, 63, 64, 65 |
+| **Decision Table Testing** | Complex business rules with multiple conditions | Enumerate condition combinations, map to actions | Discount: member + coupon + $100+ = 25% off |
+| **State Transition Testing** | Workflows, stateful UI, lifecycle objects | Map states + transitions; test valid and invalid transitions | Order: Draft → Submitted → Approved → Shipped; test Draft → Shipped (invalid) |
+| **Pairwise/Combinatorial Testing** | Multi-variable configuration (OS × browser × locale) | Generate minimum set covering all pairs | 3 OS × 4 browsers × 5 locales = 60 combos → 20 pairwise tests |
+| **Error Guessing** | Areas with historical defects, common failure patterns | Experience-driven: null, empty, special chars, concurrency | File upload: zero-byte, max-size, special-char filename, concurrent uploads |
+| **Use Case Testing** | End-to-end user journeys | Derive from actor-goal use cases; test main + alternative flows | Checkout: happy path, payment decline, address validation fail, session timeout |
+| **Classification Tree Method** | Systematic input combination for complex domains | Build classification tree of input factors, select leaf combinations | Insurance quote: age × income × risk-class × coverage-type |
+
+### Black Box Test Design Process
+
+```
+1. GATHER     → Collect requirements, acceptance criteria, user stories
+2. PARTITION  → Divide inputs into equivalence classes
+3. BOUNDARY   → Identify boundary values for each class
+4. COMBINE    → Build decision tables or pairwise matrices for multi-variable inputs
+5. JOURNEY    → Trace user flows through state transitions
+6. NEGATIVE   → Add error guessing tests (null, empty, overflow, concurrency)
+7. PRIORITIZE → Risk-rank test cases, assign to test levels (unit/integration/E2E)
+8. TRACE      → Map every test case back to a requirement
+```
+
+---
+
+## Complete Testing Type Taxonomy
+
+### 1. Unit Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | Single function, method, or class in isolation |
+| **Who** | Developer (TDD) + QAE (review) |
+| **When** | Every commit, every PR |
+| **Speed** | < 10ms per test |
+| **Automation** | 100% automated, CI-gated |
+| **Coverage Target** | 80%+ line, 70%+ branch for critical modules |
+| **Techniques** | White box (statement/branch), black box (EP/BVA) |
+| **Tools** | Jest, pytest, JUnit, XCTest, Go test, NUnit |
+| **Key Practices** | FIRST principles (Fast, Independent, Repeatable, Self-validating, Timely), mock external deps, one assertion focus |
+
+### 2. Integration Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | Two or more components interacting (service-to-service, module-to-database) |
+| **Who** | Developer + QAE |
+| **When** | Every merge to main, every PR |
+| **Speed** | < 1s per test |
+| **Automation** | 90%+ automated |
+| **Strategies** | Top-down (stub lower layers), Bottom-up (driver upper layers), Sandwich (both), Big Bang (all at once — avoid) |
+| **Tools** | Testcontainers, WireMock, Docker Compose, Spring Boot Test, supertest |
+| **Key Practices** | Test real interactions (not mocks), use contract tests at service boundaries, test error propagation between components |
+
+### 3. API Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | REST/GraphQL endpoint validation — request/response, auth, error codes, rate limits |
+| **Who** | QAE + Developer |
+| **When** | Every PR, every deploy |
+| **Speed** | < 500ms per test |
+| **Automation** | 100% automated |
+| **Coverage** | All endpoints × all HTTP methods × all status codes × auth/unauth |
+| **Tools** | REST Assured, pytest + requests, Postman/Newman, SuperTest, Pact (contract) |
+| **Key Practices** | Schema validation (OpenAPI/JSON Schema), contract testing, idempotency checks, pagination testing, rate limit testing, error response structure validation |
+
+### 4. UI Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | Visual rendering, user interaction, cross-browser/device compatibility |
+| **Who** | QAE + UX |
+| **When** | Every feature, pre-release |
+| **Speed** | 5-30s per test |
+| **Automation** | 60-80% automated (visual regression + interaction), manual for aesthetics |
+| **Coverage** | All interactive components × all states (default/hover/active/focus/disabled/error/loading) |
+| **Tools** | Playwright, Cypress, Selenium, Appium (mobile), XCUITest (iOS), Espresso (Android), Percy/Chromatic (visual regression) |
+| **Key Practices** | Use data-testid selectors (not CSS paths), visual regression snapshots, responsive breakpoint testing, keyboard navigation, screen reader compatibility |
+
+### 5. System-Level Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | Full stack validation in production-like environment — front-end through back-end through database |
+| **Who** | QAE |
+| **When** | Every release candidate, pre-deploy |
+| **Speed** | 30s-5min per scenario |
+| **Automation** | 80%+ automated |
+| **Coverage** | All major subsystem interactions, deployment configuration, infrastructure integration |
+| **Tools** | Playwright + API clients, Docker Compose (full stack), Kubernetes test environments |
+| **Key Practices** | Production-parity environment, real database with anonymized data, test network topology (firewalls, DNS, TLS), validate configuration management, test log aggregation and monitoring integration |
+
+### 6. Notification Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | Push notifications, local notifications, background refresh, in-app alerts, email, SMS |
+| **Who** | QAE + SDE |
+| **When** | Every notification-related feature, every release |
+| **Speed** | 1-10s per test (excludes delivery latency) |
+| **Automation** | 70% automated (delivery verification may be manual) |
+| **Coverage Matrix** | |
+
+| Channel | Delivery | Content | Interaction | Edge Cases |
+|---------|----------|---------|-------------|------------|
+| **Push (APNS/FCM)** | Arrives within SLA | Title, body, badge, sound correct | Tap opens correct deep link | App killed, DND mode, permissions denied |
+| **Local** | Fires at scheduled time | Content matches trigger event | Action buttons work | Timezone change, device reboot, low battery |
+| **Background Refresh** | Completes within budget | Data updated correctly | UI reflects on foreground | No network, battery saver, OS throttling |
+| **In-App** | Shows on trigger condition | Content, styling, CTA correct | Dismiss, action, swipe | Multiple simultaneous, queue ordering |
+| **Email** | Delivered, not spam | Subject, body, links correct | Links open correct destination | HTML rendering across clients |
+| **SMS** | Delivered to carrier | Message content correct | Reply handling (if applicable) | International numbers, character limits |
+
+| **Key Practices** | Mock push services in CI (APNSMock, FCM emulator), test deep link routing, verify badge count management, test notification grouping/stacking, test quiet hours/DND, verify unsubscribe/preferences |
+
+### 7. E2E Use Case Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | Complete user journeys crossing all layers — from user action through UI, API, database, and back |
+| **Who** | QAE |
+| **When** | Every release, critical path every build |
+| **Speed** | 30s-3min per journey |
+| **Automation** | Top 10-20 journeys automated; long-tail manual/exploratory |
+| **Coverage** | All critical user journeys × happy path + top 3 error paths each |
+| **Tools** | Playwright (web), XCUITest/Espresso (mobile), Maestro (mobile E2E), Detox (React Native) |
+
+**E2E Journey Template:**
+
+```
+Journey: [User Goal]
+Actor:   [User Persona]
+Priority: [P0-P3]
+
+Steps:
+  1. [Action] → Expected: [Result] → Verify: [Assertion]
+  2. [Action] → Expected: [Result] → Verify: [Assertion]
+  ...
+  N. [Final Action] → Expected: [Goal Achieved] → Verify: [Final Assertion]
+
+Error Paths:
+  E1. At step [X], [failure condition] → Expected: [graceful handling]
+  E2. At step [Y], [failure condition] → Expected: [graceful handling]
+
+Data Requirements: [Test data needed]
+Preconditions:     [Setup state]
+Cleanup:           [Teardown steps]
+```
+
+### 8. Performance Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | Response time, throughput, resource utilization under load |
+| **Who** | QAE + DevOps |
+| **When** | Pre-release, after major changes, scheduled weekly baseline |
+| **Types** | Load, Stress, Soak, Spike, Scalability, Volume |
+| **Automation** | 100% automated with scheduled runs |
+| **Tools** | k6, JMeter, Gatling, Locust, Lighthouse (web vitals) |
+| **Key Practices** | Production-like data volume, realistic workload model, monitor all layers during test, track trends release-over-release, define budgets BEFORE testing |
+| **N-Run Pattern** | Run each performance scenario N times (default: 5), aggregate results, detect variance. See Stability Testing section. |
+
+### 9. Stability Testing
+
+| Attribute | Detail |
+|-----------|--------|
+| **Scope** | System reliability over time and across repeated executions — crash-free rate, memory leaks, resource exhaustion |
+| **Who** | QAE + DevOps |
+| **When** | Pre-release (mandatory), weekly baseline |
+| **Duration** | Soak: 8-24 hours sustained; N-run: execute test suite N times consecutively |
+| **Automation** | 100% automated with output capture |
+| **Tools** | k6 (soak), custom harness (N-run), Instruments/Leaks (iOS), Valgrind (C/C++), VisualVM (Java) |
+
+**N-Run Stability Execution Pattern:**
+
+```
+┌─────────────────────────────────────────────────────┐
+│           N-RUN STABILITY TESTING                    │
+│                                                      │
+│  Config:                                             │
+│    iterations: N (default: 10, performance: 5)       │
+│    capture: [exit_code, stdout, stderr, metrics,     │
+│              memory_profile, crash_logs]              │
+│    between_runs: [cleanup, reset_state, gc_collect]  │
+│                                                      │
+│  Execution:                                          │
+│    for run in 1..N:                                  │
+│      1. Reset environment to clean state             │
+│      2. Execute test suite / scenario                │
+│      3. Capture all outputs                          │
+│      4. Record: duration, memory_peak, exit_code     │
+│      5. Check: crash? memory_growth? timeout?        │
+│                                                      │
+│  Aggregation:                                        │
+│    - pass_rate: runs_passed / N                      │
+│    - crash_rate: runs_crashed / N                    │
+│    - mean_duration, stddev, p50, p95, p99            │
+│    - memory_trend: linear regression across runs     │
+│    - flaky_tests: tests that pass/fail inconsistently│
+│                                                      │
+│  Pass Criteria:                                      │
+│    ✓ crash_rate == 0%                                │
+│    ✓ pass_rate == 100%                               │
+│    ✓ memory_growth < 5% across N runs                │
+│    ✓ duration_stddev < 10% of mean                   │
+│    ✓ zero new flaky tests detected                   │
+└─────────────────────────────────────────────────────┘
+```
+
+**Stability Metrics Dashboard:**
+
+| Metric | Formula | Healthy | Warning | Critical |
+|--------|---------|---------|---------|----------|
+| **Crash-free rate** | (N - crashes) / N | 100% | >= 99% | < 99% |
+| **Pass rate (N-run)** | Consistent passes / N | 100% | >= 98% | < 95% |
+| **Memory growth** | (mem_run_N - mem_run_1) / mem_run_1 | < 2% | 2-5% | > 5% |
+| **Duration variance** | stddev / mean | < 5% | 5-10% | > 10% |
+| **Flaky detection rate** | Inconsistent tests / total tests | 0% | < 2% | > 2% |
+| **Resource leak count** | File handles, connections not freed | 0 | 1-3 | > 3 |
+
+### 10. Cross-Cutting: Testing Type Selection Matrix
+
+Use this matrix to decide which testing types to apply for each feature or change:
+
+| Change Type | Unit | Integration | API | UI | System | Notification | E2E | Performance | Stability |
+|-------------|------|-------------|-----|-----|--------|-------------|-----|-------------|-----------|
+| **New feature** | Required | Required | If API | If UI | Pre-release | If notif | Top journeys | Baseline | Pre-release |
+| **Bug fix** | Reproduce first | If cross-component | If API | If UI | N/A | If notif | Regression | If perf-related | N/A |
+| **Refactor** | Required | Required | Contract | Visual regression | Pre-release | N/A | Regression | Before/after | Before/after |
+| **Config change** | N/A | If integration | N/A | N/A | Required | If notif routing | Smoke | If infra | N/A |
+| **Dependency upgrade** | Required | Required | Contract | Visual regression | Required | If push SDK | Regression | Baseline | Required |
+| **Performance fix** | Required | If scope crosses | If API | N/A | N/A | N/A | N/A | Required (N=5+) | Required (N=10+) |
 
 ## Coverage Strategy
 
