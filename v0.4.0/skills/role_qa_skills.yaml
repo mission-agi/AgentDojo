@@ -3,8 +3,61 @@
 # - Added assertion density check to SKILL_QA_COVERAGE_ANALYSIS exit criteria
 #   (addresses SIM_010 reward_hacking: trivial tests gaming coverage gates)
 # - Added reward_hacking detection to SKILL_QA_CHALLENGE_ALL anti_patterns
+# Changes from v0.4.0:
+# - Added SKILL_QA_TEST_STRATEGY for comprehensive test type coverage
+# - Fixed vague exit criteria in SKILL_QA_TEST_PLAN and SKILL_QA_CHALLENGE_ALL
 
 skills:
+  - skill_id: SKILL_QA_TEST_STRATEGY
+    role: ROLE_QA
+    description: >
+      Create a comprehensive test strategy covering all testing types: white box
+      (statement/branch/path/MC-DC coverage), black box (EP/BVA/decision table/
+      state transition), unit, integration, API, UI, system-level, notification,
+      E2E, performance, and stability testing. Includes N-run stability pattern
+      for automated repeated execution with output capture and aggregation.
+    prerequisites:
+      - Product requirements or system design available
+      - Target platform and technology stack identified
+    depends_on: []
+    produces:
+      - test_strategy.md
+      - testing_type_matrix.md
+    evidence_required:
+      - Test strategy document with all applicable testing types identified
+      - White box coverage targets defined per risk level
+      - Black box test design techniques mapped to features
+      - N-run stability configuration for performance and stability tests
+      - Testing type selection matrix completed for all features
+    artifacts_produced:
+      - test_strategy.md
+      - testing_type_matrix.md
+    scoring_rubric:
+      coverage: "All 10 testing types assessed for applicability"
+      depth: "White box and black box techniques mapped to specific features"
+      stability: "N-run configuration defined with pass criteria"
+      automation: "Automation level specified per testing type"
+    anti_patterns:
+      - Only happy-path functional tests without structural coverage
+      - No white box coverage targets for critical modules
+      - Performance testing without stability (N-run) validation
+      - Notification testing omitted for apps with push/local notifications
+      - No boundary value analysis on input fields
+    test_hooks:
+      - Verify all 10 testing types assessed
+      - Check white box coverage targets defined
+      - Verify N-run stability config exists
+      - Check notification testing plan if app has notifications
+    exit_criteria:
+      - All 10 testing types assessed for applicability (documented as applicable/not-applicable with rationale)
+      - White box coverage targets defined per risk level (critical >= 90% branch, high >= 80%, medium >= 70%)
+      - Black box techniques mapped to at least 3 features (EP, BVA, decision table, or state transition)
+      - N-run stability configuration documented (iterations >= 5, pass criteria defined)
+      - Testing type selection matrix completed for all features under test
+      - Automation level documented per testing type with explicit percentage target (e.g., unit >= 90%, E2E >= 70%)
+      - Notification testing plan documented for all notification channels (push/local/background) or explicitly marked not-applicable
+      - Performance budgets defined with specific latency thresholds (p50/p95/p99)
+
   - skill_id: SKILL_QA_TEST_PLAN
     role: ROLE_QA
     description: >
@@ -40,7 +93,7 @@ skills:
       - Risk-based priority assigned to every test case
       - Flaky test baseline established (flake_rate < 5%)
       - At least 3 negative/boundary test cases per feature
-      - Defect escape rate from previous cycle addressed
+      - Zero P0/P1 defect escapes repeated from previous cycle (all have preventive tests)
 
   - skill_id: SKILL_QA_TEST_EXECUTION
     role: ROLE_QA
@@ -222,5 +275,5 @@ skills:
     exit_criteria:
       - Every challenge backed by quality data
       - Business impact assessed for each quality gap
-      - Resolution criteria are binary (pass/fail)
+      - All resolution criteria verified as binary pass/fail (zero ambiguous criteria)
       - Resolution accepted or escalated within SLA
