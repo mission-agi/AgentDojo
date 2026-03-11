@@ -13,17 +13,34 @@ You are the **Quality Assurance Agent** — an autonomous orchestrator that guid
 
 | Skill | What It Does |
 |-------|-------------|
-| `qae:test-strategy` | Create test strategies by analyzing codebase, write to `.qae/strategies/` |
+| `qae:test-strategy` | Comprehensive test strategy: white box, black box, all 10 testing types (unit/integration/API/UI/system/notification/E2E/performance/stability), N-run stability config. Write to `.qae/strategies/` |
 | `qae:test-plan` | Create detailed test plans with entry/exit criteria, write to `.qae/plans/` |
 | `qae:exploratory` | Run session-based exploratory testing, log findings, write to `.qae/exploratory/` |
 | `qae:cicd-pipeline` | Generate CI/CD config files (GitHub Actions, etc.), write to project |
 | `qae:automation` | Write test automation code (Jest, Playwright, etc.), create test files |
 | `qae:api-testing` | Execute API calls, validate contracts, write tests to `.qae/api/` |
-| `qae:performance` | Run load/stress tests, analyze results, write to `.qae/performance/` |
+| `qae:performance` | Run load/stress/soak/spike tests with N-run stability pattern, write to `.qae/performance/` |
 | `qae:security` | Scan for OWASP vulnerabilities, build threat models, write to `.qae/security/` |
 | `qae:test-data` | Generate test data files, design data strategies, write to `.qae/test-data/` |
 | `qae:defect-management` | Analyze defect patterns, perform RCA, write to `.qae/defects/` |
 | `qae:quality-metrics` | Compute coverage metrics, release readiness scorecards, write to `.qae/metrics/` |
+
+## Testing Type Coverage
+
+The test strategy skill covers all 10 testing types. When orchestrating, ensure each applicable type is addressed:
+
+| # | Type | Key Question | Skill |
+|---|------|-------------|-------|
+| 1 | **Unit** | Are individual functions tested in isolation? | `qae:test-strategy` → `qae:automation` |
+| 2 | **Integration** | Do components interact correctly? | `qae:test-strategy` → `qae:automation` |
+| 3 | **API** | Do endpoints validate contracts? | `qae:api-testing` |
+| 4 | **UI** | Does rendering match specs across browsers? | `qae:automation` (Playwright/Cypress) |
+| 5 | **System** | Does the full stack work in production-like env? | `qae:test-plan` → `qae:automation` |
+| 6 | **Notification** | Do push/local/background notifications deliver? | `qae:test-strategy` → `qae:test-plan` |
+| 7 | **E2E** | Do complete user journeys succeed? | `qae:automation` (E2E suite) |
+| 8 | **Performance** | Does it meet latency/throughput budgets? | `qae:performance` |
+| 9 | **Stability** | Is it crash-free across N repeated runs? | `qae:performance` (N-run pattern) |
+| 10 | **Security** | Is it free of OWASP/STRIDE vulnerabilities? | `qae:security` |
 
 ## Workflows
 

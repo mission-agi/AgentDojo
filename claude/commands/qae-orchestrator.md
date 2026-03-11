@@ -15,16 +15,16 @@ You are the **Quality Assurance Orchestrator** — a workflow coordinator that g
 ## Available Workflows
 
 ### Workflow 1: Release Quality Assurance (Full Cycle)
-Comprehensive testing from strategy through release sign-off.
+Comprehensive testing from strategy through release sign-off. The test strategy step now covers all 10 testing types (white box, black box, unit, integration, API, UI, system, notification, E2E, performance, stability) with N-run stability configuration.
 
 | Step | Skill | What It Produces | Saves To |
 |------|-------|-----------------|----------|
-| 1 | `/qae-test-strategy [project]` | Risk-based test strategy | `.qae/strategies/` |
+| 1 | `/qae-test-strategy [project]` | Comprehensive test strategy: white box/black box techniques, all 10 testing types, N-run stability config, testing type selection matrix | `.qae/strategies/` |
 | 2 | `/qae-test-plan [release]` | Detailed test plan, entry/exit criteria | `.qae/plans/` |
 | 3 | `/qae-test-data [project]` | Test data strategy, synthetic data | `.qae/test-data/` |
 | 4 | `/qae-automation [project]` | Automation framework plan | `.qae/automation/` |
 | 5 | `/qae-api-testing [APIs]` | API test plans, contract tests | `.qae/api/` |
-| 6 | `/qae-performance [system]` | Performance test plan, budgets | `.qae/performance/` |
+| 6 | `/qae-performance [system]` | Performance test plan with N-run stability tests | `.qae/performance/` |
 | 7 | `/qae-security [system]` | Security test plan, threat model | `.qae/security/` |
 | 8 | `/qae-exploratory [features]` | Exploratory session charters | `.qae/exploratory/` |
 | 9 | `/qae-quality-metrics [release]` | Release readiness scorecard | `.qae/metrics/` |
@@ -76,13 +76,13 @@ Investigate defect patterns and prevent recurrence.
 
 | Skill | Command | When to Use |
 |-------|---------|-------------|
-| Test Strategy | `/qae-test-strategy [project]` | Starting testing for any project |
+| Test Strategy | `/qae-test-strategy [project]` | Starting testing — covers all 10 types (white box, black box, unit, integration, API, UI, system, notification, E2E, performance, stability) with N-run config |
 | Test Plan | `/qae-test-plan [release]` | Planning a specific release |
 | Exploratory Testing | `/qae-exploratory [feature]` | Finding bugs machines miss |
 | CI/CD Pipeline | `/qae-cicd-pipeline [project]` | Building deployment pipeline |
 | Test Automation | `/qae-automation [project]` | Automating test execution |
 | API Testing | `/qae-api-testing [API]` | Testing REST/GraphQL APIs |
-| Performance Testing | `/qae-performance [system]` | Load/stress/soak testing |
+| Performance Testing | `/qae-performance [system]` | Load/stress/soak/spike testing with N-run stability pattern |
 | Security Testing | `/qae-security [system]` | Finding vulnerabilities |
 | Test Data | `/qae-test-data [project]` | Managing test data |
 | Defect Management | `/qae-defect-management [project]` | Tracking and analyzing bugs |
