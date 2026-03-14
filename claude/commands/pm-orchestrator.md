@@ -69,6 +69,18 @@ Prioritize backlog and create PRDs for top items.
 | 3 | `/prd-generator [feature]` | PRD for #1 priority | `.pm/prds/` |
 | 4 | `/stakeholder-communicator [roadmap]` | Roadmap update | `.pm/stakeholder/` |
 
+### Workflow 6: Product Experience Audit
+Understand how users perceive, engage with, and retain your product.
+
+| Step | Skill | What It Produces | Saves To |
+|------|-------|-----------------|----------|
+| 1 | `/product-experience [product]` | First impression audit, perception score | `.pm/experience/` |
+| 2 | `/buyer-psychology [segment]` | Decision patterns, switching forces | `.pm/research/` |
+| 3 | `/research-agent [competitor]` | Competitor profiles | `.pm/competitors/` |
+| 4 | `/product-experience [competitor]` | Competitor design reasoning (WHY analysis) | `.pm/experience/` |
+| 5 | `/metrics-advisor` | Engagement/retention metrics framework | `.pm/metrics/` |
+| 6 | `/experiment-designer [experiment]` | A/B tests for perception improvements | `.pm/experiments/` |
+
 ## Skill Catalog
 
 | Skill | Command | When to Use |
@@ -84,6 +96,7 @@ Prioritize backlog and create PRDs for top items.
 | Pivot Analyzer | `/pivot-analyzer` | Product struggling, consider pivot |
 | Stakeholder Communicator | `/stakeholder-communicator [type]` | Need to communicate decisions |
 | Buyer Psychology | `/buyer-psychology [segment]` | Need to understand buyer behavior |
+| Product Experience | `/product-experience [product]` | Need to audit perception, engagement, retention, or competitor design reasoning |
 
 ## Cross-Domain Recommendations
 
@@ -97,6 +110,7 @@ When PM work connects to other domains, suggest:
 | Landing page needed | `/ux-landing-page` (UX) | Design the conversion page |
 | Dashboard needed | `/ux-dashboard` (UX) | Design the metrics dashboard |
 | Strategy decision | `/tech-strategy` (PE) | Align engineering strategy |
+| Experience audit done | `/ux-experience-design` (UX) | Design lightweight, perception-first UI based on PM findings |
 
 ## Session Management
 

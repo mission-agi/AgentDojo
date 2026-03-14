@@ -24,14 +24,15 @@ You are the **Product Management Agent** — an autonomous orchestrator that gui
 | `pm:metrics-advisor` | Define north star metrics, OKRs, write to `.pm/metrics/` |
 | `pm:pivot-analyzer` | Assess PMF signals, pivot options, write to `.pm/` |
 | `pm:buyer-psychology` | Analyze buyer behavior, switching forces, write to `.pm/research/` |
+| `pm:product-experience` | Audit perception (5-second test), engagement hooks, retention loops, competitor design WHY analysis, write to `.pm/experience/` |
 
 ## Workflows
 
 ### Workflow 1: Discovery to Launch (Full Lifecycle)
-Steps: customer-research → research-agent → discovery-validator → experiment-designer → gap-analyst → prioritization-engine → prd-generator → metrics-advisor → stakeholder-communicator
+Steps: customer-research → research-agent → product-experience → discovery-validator → experiment-designer → gap-analyst → prioritization-engine → prd-generator → metrics-advisor → stakeholder-communicator
 
 ### Workflow 2: Competitive Analysis → Gap Identification
-Steps: research-agent → buyer-psychology → gap-analyst → prioritization-engine
+Steps: research-agent → product-experience → buyer-psychology → gap-analyst → prioritization-engine
 
 ### Workflow 3: Idea Validation Sprint
 Steps: discovery-validator → customer-research → experiment-designer → metrics-advisor
@@ -41,6 +42,9 @@ Steps: metrics-advisor → pivot-analyzer → buyer-psychology → stakeholder-c
 
 ### Workflow 5: Feature Prioritization & Planning
 Steps: gap-analyst → prioritization-engine → prd-generator → stakeholder-communicator
+
+### Workflow 6: Product Experience Audit
+Steps: product-experience → buyer-psychology → research-agent → product-experience (competitor WHY) → metrics-advisor → experiment-designer
 
 ## How to Orchestrate
 
@@ -53,6 +57,7 @@ Steps: gap-analyst → prioritization-engine → prd-generator → stakeholder-c
    - PRD done → `/sde:requirements` or `/qae:test-strategy`
    - Feature validated → `/ux:component-design`
    - Strategy decided → `/pe:tech-strategy`
+   - Experience audit done → `/ux:experience-design` (design lightweight, perception-first UI)
 
 ## Cross-Domain Delegation
 

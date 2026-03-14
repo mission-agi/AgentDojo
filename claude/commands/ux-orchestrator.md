@@ -77,6 +77,21 @@ Review and improve an existing design.
 | 5 | `/ux-typography [page/app]` | Typography fixes | `.ux/typography/` |
 | 6 | `/ux-responsive [page/app]` | Responsive issues | `.ux/responsive/` |
 
+### Workflow 6: Experience Design (Perception + Lightweight)
+Design a fresh, lightweight, content-first experience with competitor design reasoning.
+
+| Step | Skill | What It Produces | Saves To |
+|------|-------|-----------------|----------|
+| 1 | `/ux-experience-design [product]` | Competitor design WHY analysis, lightweight audit, distinctiveness plan | `.ux/experience/` |
+| 2 | `/ux-visual-hierarchy [page]` | Layout grid based on perception priorities | `.ux/layouts/` |
+| 3 | `/ux-color-system [product]` | Distinctive color palette (not default blue) | `.ux/colors/` |
+| 4 | `/ux-typography [product]` | Type hierarchy for scanning, not reading | `.ux/typography/` |
+| 5 | `/ux-component-design [components]` | Lightweight components, content-first | `.ux/components/` |
+| 6 | `/ux-interaction-design [product]` | Speed-as-feature: skeleton screens, optimistic UI, micro-animations | `.ux/interactions/` |
+| 7 | `/ux-responsive [product]` | Mobile-first, fast loading | `.ux/responsive/` |
+| 8 | `/ux-accessibility [product]` | WCAG audit | `.ux/accessibility/` |
+| 9 | `/ux-review [product]` | Perception + heuristic review | `.ux/reviews/` |
+
 ## Skill Catalog
 
 | Skill | Command | When to Use |
@@ -92,6 +107,7 @@ Review and improve an existing design.
 | Dashboard Design | `/ux-dashboard [dashboard]` | Data visualization interfaces |
 | Accessibility | `/ux-accessibility [page]` | WCAG compliance and inclusivity |
 | Design Review | `/ux-review [page]` | Quality evaluation |
+| Experience Design | `/ux-experience-design [product]` | Lightweight design, competitor WHY analysis, perception-first, distinctiveness |
 
 ## Cross-Domain Recommendations
 
@@ -104,6 +120,7 @@ Review and improve an existing design.
 | Accessibility audit done | `/qae-automation` (QAE) | Automate accessibility tests |
 | Design review complete | `/stakeholder-communicator` (PM) | Share findings with stakeholders |
 | Responsive specs done | `/qae-exploratory` (QAE) | Exploratory test on devices |
+| Experience design done | `/product-experience` (PM) | Run PM perception audit on the designed experience |
 
 ## Session Management
 

@@ -94,13 +94,13 @@ Before selecting skills, the orchestrator analyzes the feature across 5 key dime
 
 Example: OAuth2 = **PM (product decision) + SDE (technical implementation)**
 
-### 2. **Complexity** — How complicated is it?
-- **Simple**: Single feature, low risk, <1 week
-- **Medium**: New capability, some architecture, 1-4 weeks
-- **High**: Platform rebuild, major refactor, 4-12 weeks
-- **Critical**: Core infrastructure, security-sensitive, >12 weeks
+### 2. **Complexity** — How complicated is it? (What PM does at each level)
+- **Simple**: Validate requirements, write PRD, define acceptance criteria
+- **Medium**: Run discovery + competitive analysis, align stakeholders, write PRD with metrics
+- **High**: Full discovery cycle, validate assumptions with experiments, coordinate cross-domain handoffs (UX, SDE, QAE)
+- **Critical**: Drive full lifecycle — research, experimentation, metrics framework, stakeholder comms, launch planning, post-launch feedback
 
-Example: OAuth2 = **Medium-High** (new auth system, security-sensitive)
+Example: OAuth2 = **Medium-High** (PM runs discovery, defines auth requirements, coordinates SDE + QAE security)
 
 ### 3. **Risk Level** — What could go wrong?
 - **Low**: Isolated change, can rollback easily
@@ -118,12 +118,12 @@ Example: OAuth2 = **High** (authentication is critical path)
 
 Example: OAuth2 = **8-13 skills**
 
-### 5. **Team Capacity** — How many people?
-- **1 person**: Sequential execution, mini-parallelism
-- **2-3 people**: Some parallelism
-- **5+ people**: Heavy parallelism
+### 5. **Agent Planning** — How many agents for this complexity?
+- **Single agent**: Sequential skill execution, one domain at a time (Simple features)
+- **2-3 parallel agents**: Split work across domains — e.g., PM + SDE + UX running concurrently (Medium-High features)
+- **Multi-agent orchestration**: Parallel execution across all 5 domains with coordination gates and contract-first interfaces (Critical features)
 
-Example: OAuth2 with 1 person = **4-5 weeks sequential**
+Example: OAuth2 = **2-3 parallel agents** (PM defines requirements while SDE designs architecture, QAE prepares security test strategy)
 
 ---
 
@@ -132,8 +132,8 @@ Example: OAuth2 with 1 person = **4-5 weeks sequential**
 ### Phase 1: DISCOVERY
 **Goal**: Understand the problem, user needs, competitive landscape
 
-**Skills**: pm:customer-research, pm:research-agent, pm:buyer-psychology, pe:org-health
-**Outputs**: .pm/research/, .pm/competitors/, .pe/org/
+**Skills**: pm:customer-research, pm:research-agent, pm:buyer-psychology, pm:product-experience, pe:org-health
+**Outputs**: .pm/research/, .pm/competitors/, .pm/experience/, .pe/org/
 
 ---
 
@@ -162,9 +162,10 @@ Example: OAuth2 with 1 person = **4-5 weeks sequential**
 ### Phase 4: DESIGN ⚠️ USER GATE 2
 **Goal**: Design user interface, component library, accessibility
 
-**Skills**: ux:design-system, ux:component-design, ux:visual-hierarchy, ux:typography, ux:color-system, ux:accessibility
-**Outputs**: .ux/design-systems/, .ux/components/, .ux/colors/, .ux/typography/
+**Skills**: ux:experience-design, ux:design-system, ux:component-design, ux:visual-hierarchy, ux:typography, ux:color-system, ux:accessibility
+**Outputs**: .ux/experience/, .ux/design-systems/, .ux/components/, .ux/colors/, .ux/typography/
 **Deliverables Tracked**:
+- ✅ Experience Design (competitor WHY analysis, lightweight audit, distinctiveness plan)
 - ✅ Design Theme Files (.ux/design-systems/)
 - ✅ Component Specs (all states)
 - ✅ Accessibility Audit
@@ -449,7 +450,7 @@ High bar standards that each role MUST meet at decision gates and phase completi
 ### UX/Design High Bar
 
 **Phase 4 (Design) Gate Criteria:**
-- ✅ **Accessibility Compliance** — WCAG 2.2 AA on all components (not pending, not next sprint)
+- ✅ **Accessibility Compliance** — WCAG 2.2 AA on all components (not deferred, not skipped)
 - ✅ **Component Completeness** — All states specified: default, hover, active, focus, disabled, loading, error, skeleton
 - ✅ **Design Token System** — Colors, typography, spacing follow 3-tier design token model (reference → system → component)
 - ✅ **Responsive Breakpoints** — Designs tested at mobile (375px), tablet (768px), desktop (1280px)
@@ -511,7 +512,7 @@ High bar standards that each role MUST meet at decision gates and phase completi
 - **Phase 7**: qae:test-strategy, qae:test-automation, qae:api-testing, qae:security, qae:performance
 - **Phase 8-9**: qae:cicd-pipeline, pe:incident-reliability, pm:metrics-advisor
 
-**TOTAL**: 13 skills | **TIME**: 3-4 weeks
+**TOTAL**: 13 skills | **AGENTS**: 2-3 parallel (PM + SDE + QAE)
 
 ### Dashboard/Analytics
 - **Phase 1**: pm:customer-research, pm:research-agent
@@ -523,7 +524,7 @@ High bar standards that each role MUST meet at decision gates and phase completi
 - **Phase 7**: qae:test-automation, qae:api-testing, qae:performance
 - **Phase 8-9**: qae:cicd-pipeline, pm:metrics-advisor
 
-**TOTAL**: 16 skills | **TIME**: 5-6 weeks
+**TOTAL**: 16 skills | **AGENTS**: Multi-agent across PM + UX + SDE + QAE
 
 ### Simple API Endpoint
 - **Phase 1-2**: SKIP (internal)
@@ -534,7 +535,7 @@ High bar standards that each role MUST meet at decision gates and phase completi
 - **Phase 7**: qae:api-testing, qae:security
 - **Phase 8-9**: qae:cicd-pipeline
 
-**TOTAL**: 8 skills | **TIME**: 2-3 weeks
+**TOTAL**: 8 skills | **AGENTS**: Single agent, sequential execution
 
 ---
 

@@ -1,7 +1,7 @@
 # AgentDojo — PM, PE, SDE, QAE & UX Skills
 
 ## Overview
-AgentDojo is a modular skill system for Claude Code, covering **Product Management**, **Principal Engineering**, **Senior SDE**, **Quality Assurance Engineering**, and **UI/UX Design** domains. 56 skills across 5 domains — each is a standalone agent that can be pointed at any product repository or engineering organization.
+AgentDojo is a modular skill system for Claude Code, covering **Product Management**, **Principal Engineering**, **Senior SDE**, **Quality Assurance Engineering**, and **UI/UX Design** domains. 58 skills across 5 domains — each is a standalone agent that can be pointed at any product repository or engineering organization.
 
 ## Setup — Add to Claude Code
 
@@ -83,6 +83,7 @@ If the skill loads, you're good to go.
 | Metrics Advisor | `/metrics-advisor` | North star metrics, metric trees, OKR templates, vanity metric audits |
 | Pivot Analyzer | `/pivot-analyzer` | PMF signal assessment, pivot type mapping, decision reports |
 | Buyer Psychology | `/buyer-psychology [segment]` | Buyer profiles, cognitive biases, switching forces, churn psychology |
+| Product Experience | `/product-experience [product]` | First impression audit, engagement hooks, retention loops, competitor design WHY analysis |
 
 ## How Skills Connect
 
@@ -102,6 +103,7 @@ Prioritization Engine <-- reads from gaps, PRDs, metrics
 Stakeholder Communicator <-- reads from all outputs
 Pivot Analyzer <-- reads metrics, experiments, market data
 Buyer Psychology <-- feeds Discovery, PRD, Gap Analysis
+Product Experience --> perception audit, engagement hooks, retention loops, competitor WHY
 ```
 
 ## Data Directory Convention
@@ -120,6 +122,7 @@ pm/
   metrics/*.md                  # Metric trees, OKRs, dashboards
   research/*.md                 # Interview guides, personas, JTBD
   stakeholder/*.md              # Status updates, decision logs
+  experience/*.md               # Perception audits, engagement analysis, retention reports
   cache/last-updated.json       # Staleness tracker
 ```
 
@@ -380,6 +383,7 @@ qae/
 | Dashboard | `/ux-dashboard [dashboard]` | Chart selection, KPI cards, data tables, filter patterns |
 | Accessibility | `/ux-accessibility [page]` | WCAG 2.2 compliance, keyboard nav, ARIA, focus management |
 | Design Review | `/ux-review [design]` | Nielsen's 10 Heuristics, scoring rubrics, critique frameworks |
+| Experience Design | `/ux-experience-design [product]` | Lightweight design, reading patterns, emotional design, mobile-first, competitor WHY, distinctiveness |
 
 ## How UX Skills Connect
 
@@ -400,6 +404,7 @@ ux-landing-page --> ux-responsive --> ux-dashboard
        +-- CTA/Social     +-- Breakpoints  +-- KPI Cards
 
 ux-review <-- reads from all UX outputs for design critique
+ux-experience-design --> lightweight design, competitor WHY analysis, perception-first
 ```
 
 ## UX Data Directory Convention
@@ -419,6 +424,7 @@ ux/
   dashboards/        # Chart specs, KPI layouts, data table designs
   accessibility/     # WCAG audits, keyboard maps, ARIA implementations
   reviews/           # Design critiques, heuristic scores, debt assessments
+  experience/        # Experience design audits, competitor WHY analysis, perception reports
 ```
 
 ## UX Conventions
@@ -472,16 +478,16 @@ pm-orchestrator ──→ ux-orchestrator ──→ sde-orchestrator ──→ q
 
 ## Full Skill Inventory
 
-**60 skills across 5 domains + 5 orchestrators:**
+**62 skills across 5 domains + 5 orchestrators:**
 
 | Domain | Prefix | Skills | Orchestrator |
 |--------|--------|--------|-------------|
-| Product Management | `pm-*` / named | 11 | `/pm-orchestrator` |
+| Product Management | `pm-*` / named | 12 | `/pm-orchestrator` |
 | Principal Engineering | `pe-*` / named | 11 | `/pe-orchestrator` |
 | Senior SDE | `sde-*` | 11 | `/sde-orchestrator` |
 | Quality Assurance | `qae-*` | 11 | `/qae-orchestrator` |
-| UI/UX Design | `ux-*` | 11 | `/ux-orchestrator` |
-| **Total** | | **55 skills + 5 orchestrators = 60 commands** | |
+| UI/UX Design | `ux-*` | 12 | `/ux-orchestrator` |
+| **Total** | | **57 skills + 5 orchestrators = 62 commands** | |
 
 ---
 
